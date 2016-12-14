@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:tns="142390IAPB/TicketService" 
+	targetNamespace="142390IAPB/TicketService">
+	<wsdl:types>
+		<xs:schema  targetNamespace="142390IAPB/TicketService" elementFormDefault="qualified">
+			<xs:simpleType name="sexType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="male"/>
+					<xs:enumeration value="female"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="nameType">
+				<xs:restriction base="xs:string">
+					<xs:pattern value="([a-zA-Z])+"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="phoneNumberType">
+				<xs:restriction base="xs:string">
+					<xs:pattern value="([0-9])+"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name ="ClientType">
+				<xs:sequence>
+					<xs:element name="id" type="xs:integer"/>
+					<xs:element name="firstName" type="tns:nameType"/>
+					<xs:element name="lastName" type="tns:nameType"/>
+					<xs:element name="sex" type="tns:sexType"/>
+					<xs:element name="dateOfBirth" type="xs:date"/>
+					<xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+					<xs:element name="clientTicketList" type="tns:ClientTicketListType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name="museumNameType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="history"/>
+					<xs:enumeration value="nature"/>
+					<xs:enumeration value="war"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ticketNameType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="family"/>
+					<xs:enumeration value="adult"/>
+					<xs:enumeration value="child"/>
+					<xs:enumeration value="student"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name ="TicketType">
+				<xs:sequence>
+					<xs:element name="id" type="xs:integer"/>
+					<xs:element name="museumName"  type="xs:string"/>
+					<xs:element name="ticketName"  type="xs:string"/>
+					<xs:element name="ticketDate" type="xs:date"/>
+					<xs:element name="dueDate" type="xs:date"/>
+					<xs:element name="price" type="xs:double"/>
+					<xs:element name="vatAmount" type="xs:double"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="addTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="museumName">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="nature|war|history"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="ticketName">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="adult|child|family|student"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+						<xs:element name="ticketDate" type="xs:date"/>
+						<xs:element name="dueDate" type="xs:date"/>
+
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addTicketResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ticket" type="tns:TicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="id" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ticket" type="tns:TicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketListRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="ticket" type="tns:TicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addClientRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="firstName" type="tns:nameType"/>
+						<xs:element name="lastName" type="tns:nameType"/>
+						<xs:element name="sex" type="tns:sexType"/>
+						<xs:element name="dateOfBirth" type="xs:date"/>
+						<xs:element minOccurs="0" name="phoneNumber" type="tns:phoneNumberType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addClientResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="client" type="tns:ClientType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getClientRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="id" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getClientResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="client" type="tns:ClientType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getClientListRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element minOccurs="0" name="hasRelatedTickets">
+						  <xs:simpleType>
+							<xs:restriction base="xs:string">
+							  <xs:pattern value="jah|ei"/>
+							</xs:restriction>
+						  </xs:simpleType>
+						</xs:element>
+						<xs:element minOccurs="0" name="filterBySex">
+						  <xs:simpleType>
+							<xs:restriction base="xs:string">
+							  <xs:pattern value="male|female"/>
+							</xs:restriction>
+						  </xs:simpleType>
+						</xs:element>
+						<xs:element minOccurs="0" name="filterByLastName" type="tns:nameType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getClientListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="client" type="tns:ClientType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name ="ClientTicketType">
+				<xs:sequence>		
+					<xs:element name="ticket" type="tns:TicketType"/>
+					<xs:element name="quantity" type="xs:integer"/>
+					<xs:element name="unitPrice" type="xs:double"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="addClientTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+                        <xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="ticketId" type="xs:integer"/>
+						<xs:element name="clientId" type="xs:integer"/>
+						<xs:element name="quantity" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+				
+			</xs:element>
+			<xs:complexType name ="ClientTicketListType">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="clientTicket" type="tns:ClientTicketType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="addClientTicketResponse" type="tns:ClientTicketType"/>
+			<xs:element name="getClientTicketListRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="clientId" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getClientTicketListResponse" type="tns:ClientTicketListType"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="addTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:addTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:addTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:getTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:getTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getTicketListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getTicketListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addClientMessageRequest">
+		<wsdl:part name="parameter" element="tns:addClientRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addClientMessageResponse">
+		<wsdl:part name="parameter" element="tns:addClientResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getClientMessageRequest">
+		<wsdl:part name="parameter" element="tns:getClientRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getClientMessageResponse">
+		<wsdl:part name="parameter" element="tns:getClientResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getClientListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getClientListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getClientListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getClientListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addClientTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:addClientTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addClientTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:addClientTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getClientTicketListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getClientTicketListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getClientTicketListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getClientTicketListResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="TicketPortType">
+		<wsdl:operation name="addTicket">
+			<wsdl:input message="tns:addTicketMessageRequest"/>
+			<wsdl:output message="tns:addTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTicket">
+			<wsdl:input message="tns:getTicketMessageRequest"/>
+			<wsdl:output message="tns:getTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTicketList">
+			<wsdl:input message="tns:getTicketListMessageRequest"/>
+			<wsdl:output message="tns:getTicketListMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addClient">
+			<wsdl:input message="tns:addClientMessageRequest"/>
+			<wsdl:output message="tns:addClientMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getClient">
+			<wsdl:input message="tns:getClientMessageRequest"/>
+			<wsdl:output message="tns:getClientMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getClientList">
+			<wsdl:input message="tns:getClientListMessageRequest"/>
+			<wsdl:output message="tns:getClientListMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addClientTicket">
+			<wsdl:input message="tns:addClientTicketMessageRequest"/>
+			<wsdl:output message="tns:addClientTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getClientTicketList">
+			<wsdl:input message="tns:getClientTicketListMessageRequest"/>
+			<wsdl:output message="tns:getClientTicketListMessageResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TicketBinding" type="tns:TicketPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="addTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTicketList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addClient">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClient">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addClientTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientTicketList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TicketService">
+		<wsdl:port name="TicketPort" binding="tns:TicketBinding">
+			<soap:address location="Empty"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
